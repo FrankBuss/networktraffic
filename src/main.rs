@@ -130,7 +130,7 @@ fn create_log(interface: &str) {
 }
 
 fn main() {
-    let matches = App::new("networktraffic")
+    let mut app = App::new("networktraffic")
         .version("0.1")
         .author("Frank Buss <fb@frank-buss.de>")
         .about("Logs network traffic and prints summary information")
@@ -149,8 +149,8 @@ fn main() {
                 .long("interface")
                 .help("Network interface name, for example eth0")
                 .takes_value(true),
-        )
-        .get_matches();
+        );
+    let matches = app.clone().get_matches();
 
     let file = matches.value_of("file").unwrap_or("");
     let interface = matches.value_of("interface").unwrap_or("");
@@ -159,6 +159,7 @@ fn main() {
     } else if interface != "" {
         create_log(interface);
     } else {
-        matches.usage();
+        app.print_help().unwrap();
+        println!("");
     }
 }
